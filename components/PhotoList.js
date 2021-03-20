@@ -8,7 +8,8 @@ class PhotoList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data:[]
+            data:[],
+            arrayOfLikes:[]
         };
     }
 
@@ -32,13 +33,22 @@ class PhotoList extends Component {
         }
     }
 
-    getPhotos(){
+    getSelection(index){
+        if (this.state.arrayOfLikes.includes(index)) {
+            // console.log('hello');
+            this.setState({arrayOfLikes:this.state.arrayOfLikes.filter(item => item !== index)});
+        } else {
+            // console.log('world');
+            this.setState([...this.state.arrayOfLikes, index]);
+        }
+        console.log(this.state.arrayOfLikes);
+    }
 
+    getPhotos(){
         return this.state.data.map((data,index )=> {
-            return <PhotoSection detail={data} key={data.name} index={index}/>
+            return <PhotoSection detail={data} key={data.name} index={index} array={(index)=>this.getSelection(index)}/>
         })
     }
-   
 
     render() {
         return (

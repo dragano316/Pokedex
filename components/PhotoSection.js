@@ -1,49 +1,89 @@
 //import libraries
-import React, { Component } from 'react';
+import React, { Component,useState } from 'react';
 import { View, Text, StyleSheet ,Image, TouchableWithoutFeedback} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/Ionicons';
+import {useDispatch, useSelector} from "react-redux";
+import {Action} from "../actions";
+import {Button} from "react-native-web";
 
 
 // create a component
-class PhotoSection extends Component {
-    state={
-        heartIcon: 'ios-heart-empty',
-        like:false
+const PhotoSection = ({detail,key,index,array}) => {
+
+
+    const loggedInUser = useSelector(
+        (state) => state
+    );
+    // console.log(loggedInUser);
+    const [like, setLike] = useState(false);
+    const [heartIcon, setHeartIcon] = useState('ios-heart-empty');
+    const [showReferInput, setShowReferInput] = useState(false);
+    // const [arrayOfLikes,setArrayOfLikes] = useState([]);
+
+    const dispatch = useDispatch();
+
+    // const find = () => {
+    //     console.log(arrayOfLikes);
+    // }
+    const toggleLike=(index)=>{
+
+        console.log(index);
+        // if (arrayOfLikes.includes(index)) {
+        //     // console.log('hello');
+        //     setArrayOfLikes(arrayOfLikes.filter(item => item !== index));
+        // } else {
+        //     // console.log('world');
+        //     setArrayOfLikes([...arrayOfLikes, index]);
+        // }
+
+
+
+        if(like){
+            setLike(false);
+            setHeartIcon('ios-heart-empty');
+
+        }else{
+            setLike(true);
+            setHeartIcon('ios-heart');
+        }
+
+        // console.log(arrayOfLikes);
+
+        array(index);
+
+        // find();
+        // dispatch(Action.updateUserData(arrayOfLikes));
+       // this.setState({
+       //     like:!th
+       // })
+       // if(this.state.like){
+       //     this.setState({
+       //         heartIcon:'ios-heart'
+       //     })
+       // }else{
+       //  this.setState({
+       //      heartIcon:'ios-heart-empty'
+       //  })
+       // }
     }
 
-    toggleLike=()=>{
-       this.setState({
-           like:!this.state.like
-       })
-       if(this.state.like){
-           this.setState({
-               heartIcon:'ios-heart'
-           })
-       }else{
-        this.setState({
-            heartIcon:'ios-heart-empty'
-        })
-       }
-    }
-
-    render() {
         return (
             <View style={styles.container}>
                 <Text style={styles.username}>
-                    {this.props.detail.name.toUpperCase()}
+                    {detail.name.toUpperCase()}
                 </Text>
                 <View>
-                    <Image style={styles.imageStyle} source={{uri: `https://pokeres.bastionbot.org/images/pokemon/${this.props.index+1}.png`}} />
+                    <Image style={styles.imageStyle} source={{uri: `https://pokeres.bastionbot.org/images/pokemon/${index+1}.png`}} />
                 </View>
 
                 <View style={styles.heartContainer}>
-                    <TouchableWithoutFeedback onPress={this.toggleLike} >
-                        <Icon name={this.state.heartIcon} size={30} style={{color:this.state.heartIcon === "ios-heart-empty" ? 'black' :'red',paddingHorizontal:5}}/>
+                    <TouchableWithoutFeedback onPress={()=>toggleLike(index)} >
+                        <Icon name={heartIcon} size={30} style={{color:heartIcon === "ios-heart-empty" ? 'black' :'red',paddingHorizontal:5}}/>
                     </TouchableWithoutFeedback>
                 </View>
+                {/*<Button onPress={()=>find()}><Text>Done</Text></Button>*/}
             </View>
         );
-    }
 }
 
 // define your styles
@@ -70,5 +110,12 @@ const styles =  StyleSheet.create({
     }
 });
 
+// const mapDispatchToProps = (dispatch) =>{
+//     return {
+//         updateUserData : (data) =>{
+//             dispatch(Actions.updateUser(data));
+//         }
+//     }
+// }
 //make this component available to the app
 export default PhotoSection;
